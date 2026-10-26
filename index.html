@@ -1,17 +1,386 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2eb">
+  <meta name="description" content="不听说的个人介绍与生活记录。">
+  <title>不听说 — 关于我</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f2eb;
+      --ink: #20231f;
+      --muted: #74766f;
+      --green: #355c48;
+      --line: rgba(32, 35, 31, .16);
+      --serif: "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-<html lang="en" >
+    * { box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    #cursor-trail { position: fixed; inset: 0; z-index: 20; width: 100%; height: 100%; pointer-events: none; }
+
+    .page-shell {
+      width: min(1180px, calc(100% - 64px));
+      margin: 0 auto;
+    }
+
+    header {
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wordmark {
+      font-family: var(--serif);
+      font-size: 19px;
+      letter-spacing: .08em;
+    }
+
+    nav { display: flex; gap: 34px; color: var(--muted); font-size: 13px; }
+    nav a:hover { color: var(--green); }
+
+    .hero {
+      min-height: 640px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 72px;
+      padding: 72px 0 90px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+
+    h1 {
+      margin: 26px 0 20px;
+      font-family: var(--serif);
+      font-size: clamp(64px, 9vw, 112px);
+      font-weight: 500;
+      letter-spacing: -.07em;
+      line-height: 1.04;
+    }
+
+    .hero-copy {
+      max-width: 440px;
+      color: #555850;
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.95;
+    }
+
+    .hero-links { display: flex; align-items: center; gap: 24px; margin-top: 34px; font-size: 13px; }
+
+    .primary-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--green);
+      color: white;
+      transition: background .2s, transform .2s;
+    }
+
+    .primary-link:hover { background: #274735; transform: translateY(-2px); }
+    .text-link { color: var(--muted); }
+    .text-link:hover { color: var(--green); }
+
+    .portrait-card {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      background: #d9dfd2;
+      isolation: isolate;
+    }
+
+    .portrait-card::before,
+    .portrait-card::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; }
+
+    .portrait-card::before {
+      width: 340px;
+      height: 340px;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #b4c2ad;
+    }
+
+    .portrait-card::after {
+      width: 270px;
+      height: 190px;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 0 0;
+      background: #607866;
+    }
+
+    .sun {
+      position: absolute;
+      top: 45px;
+      right: 54px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: #e6c987;
+      opacity: .9;
+    }
+
+    .portrait-mark {
+      position: absolute;
+      right: 20px;
+      bottom: 17px;
+      color: rgba(255,255,255,.8);
+      font-family: var(--serif);
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+
+    .section-rule { border-top: 1px solid var(--line); }
+
+    .intro-section {
+      display: grid;
+      grid-template-columns: .65fr 1.35fr;
+      gap: 70px;
+      padding: 86px 0 100px;
+    }
+
+    .section-label { color: var(--green); font-size: 11px; font-weight: 650; letter-spacing: .18em; }
+
+    h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 500;
+      letter-spacing: -.04em;
+      line-height: 1.35;
+    }
+
+    .intro-text { max-width: 650px; color: #555850; font-family: var(--serif); font-size: 18px; line-height: 2; }
+    .intro-text p { margin: 0 0 20px; }
+
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .note { min-height: 190px; padding: 30px 28px 32px 0; }
+    .note + .note { border-left: 1px solid var(--line); padding-left: 28px; }
+    .note-number { color: var(--green); font-family: var(--serif); font-size: 14px; }
+    .note h3 { margin: 22px 0 9px; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .note p { max-width: 260px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+    .closing { padding: 96px 0 110px; text-align: center; }
+    .closing p { margin: 18px 0 0; color: var(--muted); font-family: var(--serif); font-size: 16px; }
+
+    footer {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .page-shell { width: min(100% - 40px, 560px); }
+      header { height: 72px; }
+      nav { gap: 18px; font-size: 12px; }
+      .hero { min-height: auto; grid-template-columns: 1fr; gap: 42px; padding: 72px 0 64px; }
+      h1 { font-size: clamp(64px, 17vw, 96px); }
+      .hero-copy { font-size: 17px; }
+      .portrait-card { min-height: 340px; }
+      .intro-section { grid-template-columns: 1fr; gap: 28px; padding: 64px 0 70px; }
+      .notes { grid-template-columns: 1fr; }
+      .note { min-height: auto; padding: 24px 0; }
+      .note + .note { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+      .note h3 { margin-top: 12px; }
+      .closing { padding: 72px 0 82px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+      #cursor-trail { display: none; }
+    }
+
+    @media (pointer: coarse) { #cursor-trail { display: none; } }
+  </style>
 </head>
-    <meta charset="UTF-8">
-    <menu name = "viewport" content="width=device-width, initial-scale=1.0" >
-    <title>我的第一个网页</title>
-</head>
-
 <body>
-    <h1>你好，我是学生</h1>
-    <p>这是我的第一个网页。</p>
-    <img src="./1.jpg" width="200",height ="100">
-    <a href="https://www.bilibili.com/">哔站</a>
+  <canvas id="cursor-trail" aria-hidden="true"></canvas>
+  <div class="page-shell">
+    <header>
+      <a class="wordmark" href="#top" aria-label="不听说，回到首页">不听说.</a>
+      <nav aria-label="主导航">
+        <a href="#about">关于</a>
+        <a href="#values">在意的事</a>
+        <a href="#hello">联系</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <div class="eyebrow">A LITTLE ABOUT ME</div>
+          <h1 id="hero-title">不听说</h1>
+          <p class="hero-copy">你好，欢迎来到我的小小空间。这里记录关于我，也记录那些让我保持好奇、继续向前的日常。</p>
+          <div class="hero-links">
+            <a class="primary-link" href="#about">认识我 <span aria-hidden="true">↘</span></a>
+            <a class="text-link" href="#values">继续往下看</a>
+          </div>
+        </div>
+        <div class="portrait-card" role="img" aria-label="以柔和自然色彩绘制的抽象人物插画">
+          <span class="sun" aria-hidden="true"></span>
+          <span class="portrait-mark">慢慢认识，认真生活</span>
+        </div>
+      </section>
+
+      <section class="intro-section section-rule" id="about" aria-labelledby="about-title">
+        <div>
+          <div class="section-label">01 / ABOUT</div>
+        </div>
+        <div>
+          <h2 id="about-title">关于我，<br>从一句你好开始。</h2>
+          <div class="intro-text">
+            <p>我是<strong>不听说</strong>。比起急着给自己下定义，我更愿意在生活里慢慢认识自己，也认真认识身边的人和世界。</p>
+            <p>这个页面是我的线上名片，也是一个可以不断添写的角落。以后我会在这里分享自己的经历、喜欢的事，以及正在努力成为的样子。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="values" aria-label="我在意的事">
+        <div class="section-label" style="margin-bottom: 22px">02 / WHAT MATTERS</div>
+        <div class="notes">
+          <article class="note">
+            <div class="note-number">01</div>
+            <h3>保持好奇</h3>
+            <p>对新的想法和经历留一扇门，让每一天都有发现的可能。</p>
+          </article>
+          <article class="note">
+            <div class="note-number">02</div>
+            <h3>认真生活</h3>
+            <p>把眼前的小事做好，也给值得的人和时刻留出时间。</p>
+          </article>
+          <article class="note">
+            <div class="note-number">03</div>
+            <h3>持续向前</h3>
+            <p>不必一步到位，愿意学习、愿意尝试，就是很好的开始。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="closing" id="hello">
+        <div class="section-label">03 / SAY HELLO</div>
+        <h2>很高兴认识你。</h2>
+        <p>谢谢你来这里，愿我们都带着好奇，继续把日子过好。</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>不听说 · 个人主页</span>
+      <span>用一点时间，介绍自己。</span>
+    </footer>
+  </div>
+  <script>
+    const trailCanvas = document.querySelector("#cursor-trail");
+    const trailContext = trailCanvas.getContext("2d");
+    const trailMarks = [];
+    let previousPointer = null;
+    let trailFrame = 0;
+    let trailScale = 1;
+
+    function resizeTrailCanvas() {
+      trailScale = Math.min(window.devicePixelRatio || 1, 2);
+      trailCanvas.width = Math.round(window.innerWidth * trailScale);
+      trailCanvas.height = Math.round(window.innerHeight * trailScale);
+      trailContext.setTransform(trailScale, 0, 0, trailScale, 0, 0);
+    }
+
+    function addTrailMarks(event) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      const point = { x: event.clientX, y: event.clientY };
+      if (previousPointer) {
+        const dx = point.x - previousPointer.x;
+        const dy = point.y - previousPointer.y;
+        const distance = Math.hypot(dx, dy);
+        const steps = Math.max(1, Math.ceil(distance / 8));
+        const radius = Math.min(34, 13 + distance * .12);
+        for (let step = 1; step <= steps; step++) {
+          const progress = step / steps;
+          trailMarks.push({
+            x: previousPointer.x + dx * progress,
+            y: previousPointer.y + dy * progress,
+            radius: radius * (.78 + Math.random() * .4),
+            age: 0,
+            tint: Math.random() > .5 ? "102, 145, 119" : "190, 139, 112"
+          });
+        }
+      }
+      previousPointer = point;
+      if (trailMarks.length > 420) trailMarks.splice(0, trailMarks.length - 420);
+      if (!trailFrame) trailFrame = requestAnimationFrame(drawTrail);
+    }
+
+    function drawTrail() {
+      trailContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (let index = trailMarks.length - 1; index >= 0; index--) {
+        const mark = trailMarks[index];
+        mark.age += .025;
+        const opacity = Math.max(0, 1 - mark.age);
+        if (opacity === 0) {
+          trailMarks.splice(index, 1);
+          continue;
+        }
+        const radius = mark.radius * (1 + mark.age * .7);
+        const glow = trailContext.createRadialGradient(mark.x, mark.y, 0, mark.x, mark.y, radius * 1.8);
+        glow.addColorStop(0, `rgba(${mark.tint}, ${opacity * .22})`);
+        glow.addColorStop(.48, `rgba(${mark.tint}, ${opacity * .12})`);
+        glow.addColorStop(1, `rgba(${mark.tint}, 0)`);
+        trailContext.fillStyle = glow;
+        trailContext.beginPath();
+        trailContext.ellipse(mark.x, mark.y, radius * 1.55, radius, -.35, 0, Math.PI * 2);
+        trailContext.fill();
+      }
+      if (trailMarks.length) trailFrame = requestAnimationFrame(drawTrail);
+      else trailFrame = 0;
+    }
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && !window.matchMedia("(pointer: coarse)").matches) {
+      resizeTrailCanvas();
+      window.addEventListener("resize", resizeTrailCanvas, { passive: true });
+      window.addEventListener("pointermove", addTrailMarks, { passive: true });
+      window.addEventListener("blur", () => { previousPointer = null; }, { passive: true });
+    }
+  </script>
 </body>
 </html>
